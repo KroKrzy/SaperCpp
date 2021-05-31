@@ -38,10 +38,18 @@ void Window::putOnRend(SDL_Texture* tex, SDL_Rect rect)
 
 void Window::refrRend()
 {
-    SDL_RenderPresent(rend);
+    rendShow();
     SDL_Delay(1000/60);
     SDL_RenderClear(rend);
 }
+
+void Window::rendShow()
+{
+    SDL_RenderPresent(rend);
+}
+
+
+
 Window::~Window()
 {
     SDL_DestroyRenderer(rend);

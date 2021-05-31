@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Textures::Textures(){}
+Textures::Textures(){};
 SDL_Texture * Textures::makeTexture(string name, const char* path )
 {
     SDL_Surface* surface = NULL;
@@ -20,11 +20,11 @@ SDL_Texture * Textures::makeTexture(string name, const char* path )
         exit(1);
     }
     
-    SDL_Texture* text = SDL_CreateTextureFromSurface(window.rend, surface);
+    SDL_Texture* text = SDL_CreateTextureFromSurface(window->rend, surface);
     SDL_FreeSurface(surface);
     if (!text)
     {
-        cout<<"error creating texture: \n"<< SDL_GetError()<<endl;
+        cout<<"error creating texture: \n"<< SDL_GetError()<<endl;;
         exit(1);
     }
     return text;
@@ -35,7 +35,7 @@ void Textures::mapTexture(string name, SDL_Texture* texture)
     tex.insert({name,texture});
 }
 
-void Textures::setWindow(Window wind)
+void Textures::setWindow(Window* wind)
 {
     window=wind;
 }

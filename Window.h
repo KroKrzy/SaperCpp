@@ -14,6 +14,7 @@ public:
     Window();
     void putOnRend(SDL_Texture* tex, SDL_Rect rect);
     void refrRend();
+    void rendShow();
     
     
     ~Window();
