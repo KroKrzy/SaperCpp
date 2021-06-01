@@ -10,9 +10,10 @@
 using namespace std;
 
 int i, j;
+bool fin=false;
 
 int main(int argc, char **argv) {
-    
+
     Window wind = Window();
     Textures text = Textures();
     text.setWindow(&wind);
@@ -40,25 +41,25 @@ int main(int argc, char **argv) {
     text.include("l7","saperimg/saperimgl7.bmp");
     text.include("l8","saperimg/saperimgl8.bmp");
     text.include("l9","saperimg/saperimgl9.bmp");
-    
-    bool close_requested = false;  
+
+    bool close_requested = false;
     SDL_Rect rect;
     rect.h = 30;
     rect.w = 30;
     SDL_Event event;
-    
-    
+
+
     int time1 = time(0);
     int time2;
     int timen;
-    
+
     bool newgame = true;
-    
+
     Plansza plansza = Plansza();
     int odsloniete = 100;
     while(!close_requested)
     {
-        if (newgame){
+        if (newgame) {
             plansza.reset();
             plansza.generator();
             time1 = time(0);
@@ -68,7 +69,7 @@ int main(int argc, char **argv) {
         rect.y=100*3;
         wind.putOnRend(text.getTexture("boxstart"),rect);
         rect.x=0;
-        
+
         if (plansza.ile_zostalo/10 == 2)
             wind.putOnRend(text.getTexture("l2"),rect);
         else if (plansza.ile_zostalo/10 == 1)
@@ -76,9 +77,9 @@ int main(int argc, char **argv) {
         else if (plansza.ile_zostalo/10 == 0)
             wind.putOnRend(text.getTexture("l0"),rect);
 
-        
+
         rect.x=30;
-        
+
         if (plansza.ile_zostalo%10 == 0)
             wind.putOnRend(text.getTexture("l0"),rect);
         else if (plansza.ile_zostalo%10 == 1)
@@ -100,13 +101,13 @@ int main(int argc, char **argv) {
         else if (plansza.ile_zostalo%10 == 9)
             wind.putOnRend(text.getTexture("l9"),rect);
 
-        
-        
+
+
         time2 = time(0);
         timen = time2 - time1;
-        
+
         rect.x = 210;
-        
+
         if (timen / 100 == 0)
             wind.putOnRend(text.getTexture("l0"),rect);
         else if (timen / 100 == 1)
@@ -127,9 +128,9 @@ int main(int argc, char **argv) {
             wind.putOnRend(text.getTexture("l8"),rect);
         else if (timen / 100 == 9)
             wind.putOnRend(text.getTexture("l9"),rect);
-        
+
         rect.x = 240;
-        
+
         if ((timen % 100) / 10 == 0)
             wind.putOnRend(text.getTexture("l0"),rect);
         else if ((timen % 100) / 10 == 1)
@@ -150,9 +151,9 @@ int main(int argc, char **argv) {
             wind.putOnRend(text.getTexture("l8"),rect);
         else if ((timen % 100) / 10 == 9)
             wind.putOnRend(text.getTexture("l9"),rect);
-        
+
         rect.x = 270;
-        
+
         if (timen%10 == 0)
             wind.putOnRend(text.getTexture("l0"),rect);
         else if (timen%10 == 1)
@@ -173,11 +174,11 @@ int main(int argc, char **argv) {
             wind.putOnRend(text.getTexture("l8"),rect);
         else if (timen%10 == 9)
             wind.putOnRend(text.getTexture("l9"),rect);
-        
+
         int mouse_x, mouse_y;
         int mysz = SDL_GetMouseState(&mouse_x,&mouse_y);
-        for ( i=0;i<plansza.n-2;i++){
-            for ( j=0;j<plansza.m-2;j++)
+        for ( i=0; i<plansza.n-2; i++) {
+            for ( j=0; j<plansza.m-2; j++)
             {
                 rect.x = i * 10 *3;
                 rect.y = j * 10 *3;
@@ -191,7 +192,7 @@ int main(int argc, char **argv) {
                 close_requested = true;
             }
         }
-        
+
         if ( mysz & SDL_BUTTON(SDL_BUTTON_LEFT) )
         {
             if (mouse_y >= 300)
@@ -203,53 +204,19 @@ int main(int argc, char **argv) {
             {
                 plansza.uncover(mouse_x/30,mouse_y/30);
                 odsloniete --;
-                if (odsloniete == 0 || plansza.bombcheck(mouse_x/30,mouse_y/30) || odsloniete==0)
-                {
-                    cout << mouse_x<<" "<<mouse_y<<endl;
-                    for ( i=0;i<plansza.n-2;i++){
-                        for ( j=0;j<plansza.m-2;j++)
-                        {
-                            rect.x = i * 30;
-                            rect.y = j * 30;
-                            
-                            wind.putOnRend(text.getTexture(plansza.finish(i,j)),rect);
-                        }
-                    }
-                    
-                    while(!close_requested)
-                    {
-                        wind.rendShow();
-                        while (SDL_PollEvent(&event))
-                        {
-                            if (event.type == SDL_QUIT)
-                            {
-                                close_requested = true;
-                            }
-                        }
-                        int mouse_x, mouse_y;
-                        int mysz = SDL_GetMouseState(&mouse_x,&mouse_y);
-                        if ( mysz & SDL_BUTTON(SDL_BUTTON_LEFT) )
-                        {
-                            if (mouse_y >= 300)
-                            {
-                                newgame=true;
-                                break;
-                            }                        
-                        }
-                        
-                    }
-                }
+                if (plansza.bombcheck(mouse_x/30,mouse_y/30)) fin = true;
                 
+
             }
         }
-        else if ( mysz & SDL_BUTTON(SDL_BUTTON_RIGHT) ) 
+        else if ( mysz & SDL_BUTTON(SDL_BUTTON_RIGHT) )
         {
             if ( plansza.covercheck(mouse_x/30,mouse_y/30) == 0 )
             {
                 plansza.flag(mouse_x/30,mouse_y/30);
                 plansza.ile_zostalo-=1;
                 odsloniete --;
-
+                
             }
             else if ( plansza.covercheck(mouse_x/30,mouse_y/30) == 2 )
             {
@@ -258,9 +225,45 @@ int main(int argc, char **argv) {
                 odsloniete ++;
             }
         }
+        if (odsloniete == 0 || fin)
+        {
+            fin =false;
+            for ( i=0; i<plansza.n-2; i++) {
+                for ( j=0; j<plansza.m-2; j++)
+                {
+                    rect.x = i * 30;
+                    rect.y = j * 30;
+
+                    wind.putOnRend(text.getTexture(plansza.finish(i,j)),rect);
+                }
+            }
+
+            while(!close_requested)
+            {
+                wind.rendShow();
+                while (SDL_PollEvent(&event))
+                {
+                    if (event.type == SDL_QUIT)
+                    {
+                        close_requested = true;
+                    }
+                }
+                int mouse_x, mouse_y;
+                int mysz = SDL_GetMouseState(&mouse_x,&mouse_y);
+                if ( mysz & SDL_BUTTON(SDL_BUTTON_LEFT) )
+                {
+                    if (mouse_y >= 300)
+                    {
+                        newgame=true;
+                        break;
+                    }
+                }
+
+            }
+        }
         wind.refrRend();
-                
+
     }
-    
+
     return 0;
 }
