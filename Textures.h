@@ -5,10 +5,10 @@
 #include <SDL2/SDL_image.h>
 #include <map>
 
-#include "Window.h"
+
 using namespace std;
 
-
+class Window;
 class Textures
 {
 public:

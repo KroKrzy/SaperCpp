@@ -1,17 +1,22 @@
-game: main.o Plansza.o Window.o Textures.o
-	g++ main.o Plansza.o Window.o Textures.o -o math
 
-main.o: main.cpp
-	g++ -c main.cpp
+CC := g++
 
-Plansza.o: Plansza.cpp
-	g++ -c Plansza.cpp
+CFLAGS := `sdl2-config --libs --cflags` -ggdb3 -O0 --std=c++11 -Wall -lSDL2_image -lm
 
-Window.o: Window.cpp
-	g++ -c Window.cpp
+HDRS := Window.h Plansza.h Textures.h
 
-Textures.o: Textures.cpp
-	g++ -c Textures.cpp
+SRCS := main.cpp Window.cpp Plansza.cpp Textures.cpp
+
+OBJS := $(SRCS:.cpp=.o)
+
+EXEC := game
+
+all: $(EXEC)
+
+$(EXEC): $(OBJS) $(HDRS) makefile
+	$(CC) -o $@ $(OBJS) $(CFLAGS)
 
 clean:
-	rm *.o game
+	rm -f $(EXEC) $(OBJS)
+
+.PHONY: all clean

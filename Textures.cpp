@@ -5,6 +5,7 @@
 #include <map>
 
 #include "Textures.h"
+#include "Window.h"
 
 using namespace std;
 
@@ -19,7 +20,6 @@ SDL_Texture * Textures::makeTexture(string name, const char* path )
         SDL_Quit();
         exit(1);
     }
-    
     SDL_Texture* text = SDL_CreateTextureFromSurface(window->rend, surface);
     SDL_FreeSurface(surface);
     if (!text)
@@ -51,6 +51,18 @@ Textures::~Textures()
         SDL_DestroyTexture(it->second);
     }
 }
+
+SDL_Texture * Textures::getTexture(string name)
+{
+    typename map<string,SDL_Texture*>::iterator it;
+    for(it = tex.begin(); it != tex.end(); it++){
+        if(it->first==name){
+            return it->second;
+        }
+    }
+    return NULL;
+}
+
 
 
 

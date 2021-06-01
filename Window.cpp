@@ -5,8 +5,8 @@
 
 #include "Window.h"
 
-#define WINDOW_WIDTH (100)
-#define WINDOW_HEIGHT (110)
+#define WINDOW_WIDTH (300)
+#define WINDOW_HEIGHT (330)
 using namespace std;
 
 Window::Window()
@@ -23,7 +23,7 @@ Window::Window()
         exit(1);
     }
     Uint32 render_flags = SDL_RENDERER_ACCELERATED;
-    SDL_Renderer* rend = SDL_CreateRenderer(win, -1, render_flags);
+    rend = SDL_CreateRenderer(win, -1, render_flags);
     
     if (!rend)
     {
